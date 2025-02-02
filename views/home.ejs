@@ -30,10 +30,10 @@
 
            
               <li class="nav-item dropdown" id="roots">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img id="navimg" src="https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?k=20&m=1223671392&s=612x612&w=0&h=lGpj2vWAI3WUT1JeJWm1PRoHT3V15_1pdcTn2szdwQ0=" width="30" height="30" class=" rounded-circle">   
+              <a class="nav-link dropdown-toggle" id="tols" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img id="navimg" src="<%= pic %>" width="30" height="30" class=" rounded-circle">   
               </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <div class="dropdown-menu"  aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item" href="/profile">Profile</a>
                 <a class="dropdown-item" href="/logout">Log Out</a>
               </div>
@@ -56,12 +56,17 @@
 <body>
 
   <script>
-    var apples =  document.getElementById("logged").innerHTML
-     if(apples == "true"){
-       document.getElementById("roots").setAttribute("hidden", true)
-     }else{
-      document.getElementById("roots1").setAttribute("hidden", true)
-     }
+    var apples = document.getElementById("logged").innerHTML
+
+if (apples === "true") {  // Compare as a string
+    document.getElementById("roots1").setAttribute("hidden", true);
+    document.getElementById("roots").removeAttribute("hidden");
+
+} else {
+    document.getElementById("roots").setAttribute("hidden", true);
+    document.getElementById("roots1").removeAttribute("hidden");
+
+}
    </script>
 
 

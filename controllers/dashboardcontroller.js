@@ -1,9 +1,12 @@
-exports.getcontrol = (req,res)=>{
+const User = require('./../models/usermodel')   
+exports.getcontrol = async(req,res)=>{
     if(req.isAuthenticated()){
-        res.render('dashboard',{logged_in : false})
+        const Userprofile = await User.findById({_id : req.user.id})
+        res.render('dashboard' ,{  pic : Userprofile.imageurl , logged_in :"true"})
+       
     }
     else{
-        res.render('dashboard',{logged_in : true})
+        res.redirect('/')
     }
     
 }

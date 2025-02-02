@@ -31,17 +31,29 @@ exports.getprofile_editcontrol = async(req,res)=>{
 exports.profile_editcontrol = async(req,res)=>{
     console.log("profile edit control testing")
     if(req.isAuthenticated()){
-        let newImageUrl = "https://www.business2community.com/wp-content/uploads/2017/08/blank-pr…"; // Keep the old image by default
+       if(!req.file){
+         UpadteProfile = await User.findOneAndUpdate({_id : req.user.id}, {
+            
+            location : req.body.location, phone :req.body.number , fname : req.body.name ,
+            
+              
+      }, { new: true })
+       }
+
+
         if (req.file) {
             newImageUrl = '/uploads/' + req.file.filename; // Store new image path
-        }
-    
-        const UpadteProfile = await User.findOneAndUpdate({_id : req.user.id}, {
+            UpadteProfile = await User.findOneAndUpdate({_id : req.user.id}, {
             
-              location : req.body.location, phone :req.body.number , fname : req.body.name ,
-              imageurl: newImageUrl, 
-                
-        }, { new: true })
+                location : req.body.location, phone :req.body.number , fname : req.body.name ,
+                imageurl: newImageUrl, 
+                  
+          }, { new: true })
+        }
+
+
+    
+
         if(!UpadteProfile){
             console.log("profile not updated")
         }else{
