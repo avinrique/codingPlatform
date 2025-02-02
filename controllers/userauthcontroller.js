@@ -6,17 +6,7 @@ exports.getforgotcontrol = async(req,res)=>{
 }
 
 exports.forgotcontrol = async(req,res)=>{
-    
-
-    const googleUSer =await User.findOne({username :req.body.email})
-    if(googleUSer == null){
-        console.log("shitman the entered email was incorrect")
-        res.redirect("/")
-
-    }else{
-       
-        if(!googleUSer.googleId || googleUSer.googleId == null ){
-            const user =  await User.findOne({username : req.body.email})
+            const user =  await User.findOne({email : req.body.email})
             console.log(user)
             if(!user){
                 console.log('no user found')
@@ -34,7 +24,7 @@ exports.forgotcontrol = async(req,res)=>{
                      subject : "reset password", 
                      html : "The password reset link is : <a href = 'http://192.168.137.1:80/user/resetpassword/"+resetToken+"'>click here</a>"
                  })
-                 console.log("i did make it")
+                 
                  res.redirect('/')
                 }catch(error){
                     console.log(error)
@@ -44,10 +34,8 @@ exports.forgotcontrol = async(req,res)=>{
                     await user.save({validateBeforeSave : false})
                     
                 }
-            }
-        }else{
-            res.render('googleusererror',{errormsg : "User was logged in via google, so no password was created"})
-        }
+            
+        
     }
  
 

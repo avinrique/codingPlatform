@@ -10,13 +10,14 @@ const UserSchema = new mongoose.Schema({
             minlength : 4 , 
             maxlength : 25 ,
             trim : true , 
-            default : "N  /  A"
+            default : "N  /  A",
+            unique : true ,
         }, 
         active : {
             type : Boolean,
             default : false
         },
-        username : {
+        USN : { //
             type : String , 
             unique : true , 
             require : true ,
@@ -46,14 +47,25 @@ const UserSchema = new mongoose.Schema({
         dataid : {
             type : String 
         }
-        ,occupation : {
-            type :String
+        ,
+        Department : {
+            type : String ,
+            default : "N/A"
+        },
+        Year : {
+            type : String ,
+            default : 0
         }
         ,
+        Rollno : {
+            type : String ,
+            
+        },  
+        Semester: {
+            type : Number ,
+        },
+
         password : String ,
-       
-        address : String,
-        
         phonecode :{
             type : String ,
             maxlength : 4
@@ -66,17 +78,11 @@ const UserSchema = new mongoose.Schema({
         minlength : 10 ,
         maxlength : 10
         } ,
-        occupation : String , 
-        image:
-        {
-            data: Buffer,
-            contentType: String
-        },
-        inageurl : {
+            imageurl : {
             type : String ,
             default : "https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
         },
-        create : {
+        created : {
             type : Date , 
             default : Date.now()
         },
@@ -85,17 +91,14 @@ const UserSchema = new mongoose.Schema({
         },
         passwordresettoken : String ,
         passwordresetdate : Date ,
-    // social media
-        website : String ,
-        github :String , 
-        instagram : String ,
-        facebook : String ,
-        twitter : String ,
-    
+   
+  
+    //USN==> location + Year + Dept + Rollno
+    //1BY22CS001==> BY + 22 + CS + 001 
    
 })
 
-UserSchema.plugin(passportLocalMongoose, { usernameField : 'username' })
+UserSchema.plugin(passportLocalMongoose, { usernameField : 'email' })
 UserSchema.plugin(findOrCreate)
 UserSchema.methods.createpasswordresettoken = function(){
 const resetToken = crypto.randomBytes(32).toString('hex');

@@ -7,7 +7,7 @@ exports.getprofilecontrol = async(req,res)=>{
             console.log("no data found")
         }else{
             
-            res.render('profile' ,{name : Userprofile.fname  ,username : Userprofile.email, email : Userprofile.username , work : Userprofile.occupation  , pic : Userprofile.inageurl , website : Userprofile.website ,github : Userprofile.github, twitter : Userprofile.twitter, facebook : Userprofile.facebook , instagram : Userprofile.instagram,address : Userprofile.address ,phone :Userprofile.phone })
+            res.render('profile' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : Userprofile.USN ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone })
         }
     }else{
         res.redirect('/')
@@ -22,21 +22,26 @@ exports.getprofile_editcontrol = async(req,res)=>{
             console.log("no data found")
         }else{
             
-            res.render('profile_edit' ,{name : Userprofile.fname  ,username : Userprofile.email, email : Userprofile.username , work : Userprofile.occupation  , pic : Userprofile.inageurl , website : Userprofile.website ,github : Userprofile.github, twitter : Userprofile.twitter, facebook : Userprofile.facebook , instagram : Userprofile.instagram,address : Userprofile.address ,phone :Userprofile.phone })
+            res.render('profile_edit' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : Userprofile.USN , pic : Userprofile.imageurl , location : Userprofile.location,phone :Userprofile.phone })
         }
     }else{
         res.redirect('/')
     } 
 }
 exports.profile_editcontrol = async(req,res)=>{
+    console.log("profile edit control testing")
     if(req.isAuthenticated()){
-        console.log(req.body)
-        console.log("------------------------"+req.body.image+"------------------------------")
+        let newImageUrl = "https://www.business2community.com/wp-content/uploads/2017/08/blank-pr…"; // Keep the old image by default
+        if (req.file) {
+            newImageUrl = '/uploads/' + req.file.filename; // Store new image path
+        }
+    
         const UpadteProfile = await User.findOneAndUpdate({_id : req.user.id}, {
             
-            fname : req.body.name  , email : req.body.username , occupation : req.body.work  , website : req.body.website ,github : req.body.github, twitter : req.body.github, facebook : req.body.facebook , instagram : req.body.instagram ,address : req.body.address , phone :req.body.number 
-
-        })
+              location : req.body.location, phone :req.body.number , fname : req.body.name ,
+              imageurl: newImageUrl, 
+                
+        }, { new: true })
         if(!UpadteProfile){
             console.log("profile not updated")
         }else{
@@ -101,8 +106,6 @@ exports.changepasscontrol = async(req,res)=>{
     }else{
         res.redirect('/')
     }
-
- 
 }
 
  

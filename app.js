@@ -34,22 +34,22 @@ mongoose.connect(dburl,
 {useCreateIndex :true}).then(()=>{
     console.log("connected to database")
 })
-
+app.use('/uploads', express.static('uploads'));
 //multer
-var fs = require('fs');
-var path = require('path');
-const multer = require('multer')
-var storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-      cb(null, 'uploads')
-  },
-  filename: (req, file, cb) => {
-      cb(null, file.fieldname + '-' + Date.now())
-  }
-});
-var upload = multer({ storage: storage });
+// var fs = require('fs');
+// var path = require('path');
+// const multer = require('multer')
+// var storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//       cb(null, 'uploads')
+//   },
+//   filename: (req, file, cb) => {
+//       cb(null, file.fieldname + '-' + Date.now())
+//   }
+// });
+// upload = multer({ storage: storage });
 
-module.exports = upload;
+
 //using middlewares
 //app.use(helmet())
 
@@ -87,7 +87,6 @@ const { buffer } = require('stream/consumers');
 
 // passport.use(new LocalStrategy({usernameField : 'email'},User.authenticate()));
 passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
-  console.log("check111")
   console.log(email)
   console.log(password)
   try {
@@ -103,11 +102,9 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, passwor
       }   
       console.log(password)
       const isValidPassword = await user.authenticate(password);
-      
       if (!isValidPassword) {
           return done(null, false, { message: 'Incorrect password' });
       }
-
       return done(null, user);
   } catch (err) {
    
@@ -180,6 +177,6 @@ app.all('*', async (req,res,next)=>{
 })
 
 //export app.js for server
-module.exports =  app
+module.exports = app
 
 

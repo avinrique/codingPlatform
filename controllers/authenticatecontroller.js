@@ -68,13 +68,37 @@ exports.getlogincontrol = (req,res)=>{
                }
 
 
-            
-        await  User.register({email : req.body.email, username: req.body.username, active :"false",randomurl : randurl  }, req.body.password,(err,user)=>{
+               //dividing the usn into year , department and roll number
+
+               const usn = req.body.USN;
+               const regex = /^(\d{0,2})by(\d{2})([a-zA-Z]{2})(\d{3})$/;
+               const match = usn.match(regex);
+   
+               let year = "", department = "", rollNo = "";
+   
+               if (match) {
+                   year = "20" + match[2];
+                   department = match[3];
+                   rollNo = match[4];
+   
+                   console.log("Year:", year);
+                   console.log("Department:", department);
+                   console.log("Roll Number:", rollNo);
+               } else {
+                   console.error("Invalid USN format");
+                   return res.render('signup', { errormsg: "Invalid USN format" });
+               }
+
+
+    
+
+        await  User.register({email : req.body.email, USN: req.body.USN, active :"false",randomurl : randurl , Year : year , Department : department , Rollno : rollNo }, req.body.password,(err,user)=>{
             if(err){   
                 console.log(err)
                 res.render('signup',{errormsg : "email already taken"})
             }
             else{
+
                 if(User.findOne({email : req.body.email , active : false}) != null ){
                     req.session.lau = req.body.email
                     console.log(req.lau)
@@ -107,7 +131,6 @@ exports.getVerified = (req,res)=>{
 }
 exports.postVerified = (req,res)=>{   
     otp = req.body.otp 
-    console.log("cause im sexy and i know it")
     User.findOneAndUpdate({randomurl : otp} , {userallowed: true} ,  (err,doc)=>{
             if(err){
                 console.log(err)
@@ -115,16 +138,10 @@ exports.postVerified = (req,res)=>{
                 res.redirect('/')
             }
         })    
- 
 
-    
-console.log(req.params)
-console.log(randurl)
 
 
 }
-exports.Verify = (req,res)=>{
-    console.log("avin")
-}
+
 
  
