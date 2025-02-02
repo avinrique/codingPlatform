@@ -143,6 +143,7 @@ const dashboard = require('./routes/dashboard');
 const authenticateing = require('./routes/authenticate')
 const profile = require('./routes/profile')
 const userauth = require('./routes/userauth')
+const create_exam = require('./routes/examRoutes')
 
 
 app.get('/logout', async (req, res, next) => {
@@ -166,7 +167,7 @@ app.use('/dashboard',dashboard)
 app.use('/authenticate',authenticateing)
 app.use('/profile',profile)
 app.use('/user' , userauth)
-
+app.use('/exam' , create_exam)
 /*
 */
 app.all('*', async (req,res,next)=>{

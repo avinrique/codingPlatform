@@ -49,9 +49,7 @@
   <div class="container">
     <div class="main-body">
     
-          <!-- Breadcrumb -->
-       
-          <!-- /Breadcrumb -->
+
     
           <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
@@ -78,45 +76,103 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">Full Name</h6>
+                        <h6 class="mb-0">Full Name</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                        <input type="text" name="name" id="name" placeholder="<%= name %>">
-                      
+                        <input type="text" name="name" id="name" placeholder="<%= name %>" value="<%= name %>">
                     </div>
-                  </div>
-                  <hr>
-
-                  <hr>
-                  <div class="row">
+                </div>
+                <hr>
+                
+                <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">Phone</h6>
+                        <h6 class="mb-0">Email</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                        <input type="number" name="number" id="number" placeholder="  <%=phone%>">
-                    
+                        <p><%= email %></p>
                     </div>
-                  </div>
-                  <hr>
-                  <div class="row">
+                </div>
+                <hr>
+                
+                <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">USN</h6>
+                        <h6 class="mb-0">Phone</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                        <input type="text" name="USN" id="USN" placeholder=" <%=USN%>">
-                     
+                        <input type="number" name="number" id="number" placeholder="<%= phone %>" value="<%=phone%>" >
                     </div>
-                  </div>
-                  <hr>
-                  <div class="row">
+                </div>
+                <hr>
+                
+                <div class="row">
                     <div class="col-sm-3">
-                      <h6 class="mb-0">Location</h6>
+                        <h6 class="mb-0">USN</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                        <input type="text" name="location" id="address" placeholder="<%=location%>">
-                      
+                        <p><%= USN %></p>
                     </div>
-                  </div>
+                </div>
+                <hr>
+                
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Department</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <p><%= department %></p> 
+                    </div>
+                </div>
+                <hr>
+                
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Semester</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <input type="text" name="sem" id="sem" placeholder="<%= sem %>" value="<%= sem %>">
+                    </div>
+                </div>
+                <hr>
+                
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Year</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <p><%= year %></p> 
+                    </div>
+                </div>
+                <hr>
+                
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Roll Number</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <p><%= rollno %></p> 
+                    </div>
+                </div>
+                <hr>
+                
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">User Type</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <p><%= usertype %></p> 
+                    </div>
+                </div>
+                <hr>
+                
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Location</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <input type="text" name="location" id="address" placeholder="<%= location %>" value="<%= location %>">
+                    </div>
+                </div>
+                <hr>
                   <hr>
                   <div class="row">
                     <div class="col-sm-12">
@@ -139,44 +195,6 @@
         </div>
     </div>
 </form>
-
-
-
-
-
-
-
-<h1 id="nam" hidden><%=name%></h1>
-<h1 id="adds" hidden><%=location%></h1>
-<h1 id="phn" hidden><%=phone%></h1>
-<h1 id="user" hidden><%=USN%></h1>
-
-
-<script>
-
-    var f = document.getElementById('nam').innerHTML
-    document.getElementById('name').value = f
-    var g = document.getElementById('adds').innerHTML
-    document.getElementById('address').value = g
-    var h = document.getElementById('user').innerHTML
-    document.getElementById('USN').value = h
-    var i = document.getElementById('phn').innerHTML
-    document.getElementById('number').value = i
-  
-    
- </script>
-
-
-    
-
-
-
-
-
-
-
-
-
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

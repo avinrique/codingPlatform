@@ -7,7 +7,7 @@ exports.getprofilecontrol = async(req,res)=>{
             console.log("no data found")
         }else{
             
-            res.render('profile' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : Userprofile.USN ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone })
+            res.render('profile' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : Userprofile.USN ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone , department : Userprofile.Department , sem : Userprofile.Semester , year : Userprofile.Year , rollno : Userprofile.Rollno , usertype : Userprofile.usertype })
         }
     }else{
         res.redirect('/')
@@ -22,7 +22,7 @@ exports.getprofile_editcontrol = async(req,res)=>{
             console.log("no data found")
         }else{
             
-            res.render('profile_edit' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : Userprofile.USN , pic : Userprofile.imageurl , location : Userprofile.location,phone :Userprofile.phone })
+            res.render('profile_edit' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : Userprofile.USN ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone , department : Userprofile.Department , sem : Userprofile.Semester , year : Userprofile.Year , rollno : Userprofile.Rollno , usertype : Userprofile.usertype })
         }
     }else{
         res.redirect('/')
@@ -34,7 +34,7 @@ exports.profile_editcontrol = async(req,res)=>{
        if(!req.file){
          UpadteProfile = await User.findOneAndUpdate({_id : req.user.id}, {
             
-            location : req.body.location, phone :req.body.number , fname : req.body.name ,
+            location : req.body.location, phone :req.body.number , fname : req.body.name , Semester : req.body.sem 
             
               
       }, { new: true })
@@ -45,7 +45,7 @@ exports.profile_editcontrol = async(req,res)=>{
             newImageUrl = '/uploads/' + req.file.filename; // Store new image path
             UpadteProfile = await User.findOneAndUpdate({_id : req.user.id}, {
             
-                location : req.body.location, phone :req.body.number , fname : req.body.name ,
+                location : req.body.location, phone :req.body.number , fname : req.body.name ,  Semester : req.body.sem ,
                 imageurl: newImageUrl, 
                   
           }, { new: true })

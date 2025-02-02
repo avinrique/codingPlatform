@@ -36,8 +36,8 @@ const UserSchema = new mongoose.Schema({
         },
         usertype: {
             type : String ,
-            default: "user",
-            enum : ["user","admin","official"]
+            default: "student",
+            enum : ["student","admin","teacher"],required : true
         },
         userallowed : {
             type : Boolean, 
@@ -48,22 +48,24 @@ const UserSchema = new mongoose.Schema({
             type : String 
         }
         ,
-        Department : {
-            type : String ,
-            default : "N/A"
-        },
+        Department :  { 
+            type: String,
+            enum: ["mc", "is", "cs", "et", "ec", "ai", "cv"] // enum: ["MCA", "ISE", "CSE", "ETE", "CIV", "COM", "AI"]
+             },
+      
         Year : {
             type : String ,
-            default : 0
+            
         }
         ,
         Rollno : {
             type : String ,
             
         },  
-        Semester: {
-            type : Number ,
-        },
+        Semester: { 
+            type: Number,
+             min: 1, max: 8 
+            }, 
 
         password : String ,
         phonecode :{
