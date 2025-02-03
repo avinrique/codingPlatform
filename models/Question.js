@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const QuestionSchema = new mongoose.Schema({
-    department: { type: String, enum: ["MCA", "ISE", "CSE", "ETE", "CIV", "COM", "AI"], required: true },
+    department: { type: String, enum: ["mc", "is", "cs", "et", "ec", "ai", "cv"], required: true },
     semester: { type: Number, min: 1, max: 8, required: true },
     type: { type: String, enum: ["mcq", "coding"], required: true },
     question: String,

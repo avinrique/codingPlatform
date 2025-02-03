@@ -44,7 +44,7 @@
 <body>
     
 
-    <form action="/profile/profile_edit" method="post" , enctype="multipart/form-data">
+    <!-- <form action="/profile/profile_edit" method="post" , enctype="multipart/form-data">
 
   <div class="container">
     <div class="main-body">
@@ -194,6 +194,162 @@
 
         </div>
     </div>
+</form> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<form action="/profile/profile_edit" method="post" enctype="multipart/form-data">
+  <div class="container">
+      <div class="main-body">
+          <div class="row gutters-sm">
+              <div class="col-md-4 mb-3">
+                  <div class="card">
+                      <div class="card-body">
+                          <div class="d-flex flex-column align-items-center text-center">
+                              <img id="profileimg" src="<%= pic %>" alt="Profile Image" class="rounded-circle" width="150">
+                              <input type="file" name="image" accept="image/*">
+                              <div class="mt-3">
+                                  <h4><%= name %></h4>
+                                  <p class="text-muted font-size-sm"><%= location %></p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-md-8">
+                  <div class="card mb-3">
+                      <div class="card-body">
+
+                          <!-- Full Name -->
+                          <div class="row">
+                              <div class="col-sm-3"><h6 class="mb-0">Full Name</h6></div>
+                              <div class="col-sm-9 text-secondary">
+                                  <input type="text" name="name" placeholder="<%= name %>" value="<%= name %>">
+                              </div>
+                          </div>
+                          <hr>
+
+                          <!-- Email (Read-Only) -->
+                          <div class="row">
+                              <div class="col-sm-3"><h6 class="mb-0">Email</h6></div>
+                              <div class="col-sm-9 text-secondary">
+                                  <p><%= email %></p>
+                              </div>
+                          </div>
+                          <hr>
+
+                          <!-- Phone -->
+                          <div class="row">
+                              <div class="col-sm-3"><h6 class="mb-0">Phone</h6></div>
+                              <div class="col-sm-9 text-secondary">
+                                  <input type="number" name="number" placeholder="<%= phone %>" value="<%= phone %>">
+                              </div>
+                          </div>
+                          <hr>
+
+                          <!-- USN (Students only) -->
+                          <% if (usertype === 'student') { %>
+                          <div class="row">
+                              <div class="col-sm-3"><h6 class="mb-0">USN</h6></div>
+                              <div class="col-sm-9 text-secondary">
+                                  <p><%= USN %></p>
+                              </div>
+                          </div>
+                          <hr>
+                          <% } %>
+
+                          <!-- Department (Students & Teachers) -->
+                          <% if (usertype === 'student' || usertype === 'teacher') { %>
+                          <div class="row">
+                              <div class="col-sm-3"><h6 class="mb-0">Department</h6></div>
+                              <div class="col-sm-9 text-secondary">
+                                  <input type="text" name="department" placeholder="<%= department %>" value="<%= department %>">
+                              </div>
+                          </div>
+                          <hr>
+                          <% } %>
+
+                          <!-- Semester (Students only) -->
+                          <% if (usertype === 'student') { %>
+                          <div class="row">
+                              <div class="col-sm-3"><h6 class="mb-0">Semester</h6></div>
+                              <div class="col-sm-9 text-secondary">
+                                  <input type="text" name="sem" placeholder="<%= sem %>" value="<%= sem %>">
+                              </div>
+                          </div>
+                          <hr>
+                          <% } %>
+
+                          <!-- Year (Students & Teachers) -->
+                          <% if (usertype === 'student' || usertype === 'teacher') { %>
+                          <div class="row">
+                              <div class="col-sm-3"><h6 class="mb-0">Year</h6></div>
+                              <div class="col-sm-9 text-secondary">
+                                  <p><%= year ? year : "Not Available" %></p>
+                              </div>
+                          </div>
+                          <hr>
+                          <% } %>
+
+                          <!-- Roll Number (Students only) -->
+                          <% if (usertype === 'student') { %>
+                          <div class="row">
+                              <div class="col-sm-3"><h6 class="mb-0">Roll Number</h6></div>
+                              <div class="col-sm-9 text-secondary">
+                                  <p><%= rollno %></p>
+                              </div>
+                          </div>
+                          <hr>
+                          <% } %>
+
+                          <!-- User Type (Read-Only) -->
+                          <div class="row">
+                              <div class="col-sm-3"><h6 class="mb-0">User Type</h6></div>
+                              <div class="col-sm-9 text-secondary">
+                                  <p><%= usertype %></p>
+                              </div>
+                          </div>
+                          <hr>
+
+                          <!-- Location -->
+                          <div class="row">
+                              <div class="col-sm-3"><h6 class="mb-0">Location</h6></div>
+                              <div class="col-sm-9 text-secondary">
+                                  <input type="text" name="location" placeholder="<%= location %>" value="<%= location %>">
+                              </div>
+                          </div>
+                          <hr>
+
+                          <!-- Submit & Update Password -->
+                          <div class="row">
+                              <div class="col-sm-12">
+                                  <input type="submit" class="btn btn-info">
+                                  <a href="/profile/changepassword" class="btn btn-info">Update Password</a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div> <!-- End of col-md-8 -->
+          </div> <!-- End of row -->
+      </div> <!-- End of main-body -->
+  </div> <!-- End of container -->
 </form>
 
 

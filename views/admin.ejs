@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Admin Panel - Exams</h1>
+    <a href="/admin/create_exam">Create New Exam</a>
+    <h2>All Exams</h2>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Departments</th>
+            <th>Semester</th>
+            <th>Type</th>
+            <th>MCQs</th>
+            <th>Coding</th>
+            <th>Exam Start</th>
+            <th>Exam End</th>
+            <th>Duration</th>
+            <th>Actions</th>
+        </tr>
+        <% exams.forEach(exam => { %>
+            <tr>
+                <td><%= exam.name %></td>
+                <td><%= exam.departments.join(", ") %></td>
+                <td><%= exam.semester %></td>
+                <td><%= exam.questionType %></td>
+                <td><%= exam.numMCQs %></td>
+                <td><%= exam.numCoding %></td>
+                <td><%= new Date(exam.scheduledAt).toLocaleString() %></td>
+                <td><%= new Date(exam.scheduledTill).toLocaleString() %></td>
+                <td><%= exam.duration %> mins</td>
+                <td>
+                    <a href="/admin/exam/<%= exam._id %>">Edit</a> | 
+                    <form action="/admin/exam/delete/<%= exam._id %>" method="POST" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+    </table>
+</body>
+</html>

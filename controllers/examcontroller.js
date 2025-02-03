@@ -1,51 +1,130 @@
 // controllers/examController.js
 const Exam = require("../models/Exam");
 const Question = require("../models/Question");
-exports.getExam = async (req, res) => {
-    res.render('create_exam');
+
+const User = require('./../models/usermodel')
+const { v4: uuidv4 } = require('uuid');
+const passport =  require('passport')
+
+
+function ensureAdmin(req, res, next) {
+    if (req.isAuthenticated() && req.user.role === "admin") {
+        return next();
+    }
+    res.status(401).send("Unauthorized: Admin access only.");
+}
+
+function ensureTeacher(req, res, next) {
+    if (req.isAuthenticated() && req.user.role === "teacher") {
+        return next();
+    }
+    res.status(401).send("Unauthorized: Admin access only.");
+}
+
+
+
+exports.getExam = async (req, res,) => {
+    if(req.isAuthenticated()){
+        console.log("authenticated")
+        const Userprofile = await User.findById({_id : req.user.id})
+        if(Userprofile.usertype == "admin" || Userprofile.usertype == "teacher"){
+            res.render('create_exam' ,{  pic : Userprofile.imageurl , logged_in :"true"})
+        }
+        else{
+           res.redirect('/admin/login')
+        }
+    }
+    else{
+        res.redirect('/admin/login')
+    }
+
 }
 
 exports.createExam = async (req, res) => {
-    
     try {
-        const { department, semester, questionType, numMCQs, numCoding, duration, scheduledAt } = req.body;
-
-        // Find MCQs and coding questions based on selected criteria
-        const mcqs = await Question.find({
-            department,
-            semester,
-            type: "mcq"
-        }).limit(numMCQs);
-
-        const codingQuestions = await Question.find({
-            department,
-            semester,
-            type: "coding"
-        }).limit(numCoding);
-
-        // Create new exam entry
+        const { name, departments, semester, questionType, numMCQs, numCoding, numTotalQuestions , scheduledAt , Duration, scheduledTill } = req.body;
+        console.log(scheduledTill)
         const newExam = new Exam({
-            name: `${department} ${semester} Placement Exam`,
-            department,
+            name,
+            departments: Array.isArray(departments) ? departments : [departments], 
             semester,
             questionType,
-            numMCQs,
-            numCoding,
-            questions: [...mcqs, ...codingQuestions],
-            duration,
-            scheduledAt,
-            // createdBy: req.user.id  // Assuming req.user is populated with the logged-in user
+            scheduledTill : scheduledTill,
+            duration:Duration,
+            scheduledAt: scheduledAt,
+            numMCQs: parseInt(numMCQs) || 0,
+            numCoding: parseInt(numCoding) || 0,
+            numTotalQuestions: parseInt(numTotalQuestions) || 0,
+            createdBy: req.user.id,
         });
-
-        // Save the exam to the database
         await newExam.save();
-        // res.render('exam');
-        res.status(201).json({
-            message: "Exam created successfully",
-            exam: newExam
-        });
+        res.redirect("/admin");
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Server error" });
+        res.status(400).send(error.message);
     }
 };
+
+exports.getEditExam = async (req, res) => {
+    if(req.isAuthenticated()){
+        console.log("authenticated")
+        const Userprofile = await User.findById({_id : req.user.id})
+        if(Userprofile.usertype == "admin" || Userprofile.usertype == "teacher"){
+            try {
+                const exam = await Exam.findById(req.params.examId);
+                if (!exam) return res.status(404).send("Exam not found.");
+                res.render('edit_exam' ,{  pic : Userprofile.imageurl , logged_in :"true" ,exam : exam})
+            } catch (error) {
+                console.error(error);
+                res.status(500).send("Server error");
+            }
+        }
+        else{
+           res.redirect('/admin/login')
+        }
+    }
+    else{
+        res.redirect('/admin/login')
+    }
+}
+
+
+
+
+
+exports.postEditExam = async (req, res) => {
+
+try {
+    const { name, departments, semester, questionType, numMCQs, numCoding, numTotalQuestions, scheduledAt, scheduleTill, duration } = req.body;
+    
+    const updatedExam = await Exam.findByIdAndUpdate(req.params.examId, {
+        name,
+        departments: Array.isArray(departments) ? departments : [departments],
+        semester,
+        questionType,
+        numMCQs: questionType.includes("mcq") ? parseInt(numMCQs) || 0 : 0,
+        numCoding: questionType.includes("coding") ? parseInt(numCoding) || 0 : 0,
+        numTotalQuestions: questionType === "mcq&coding" ? (parseInt(numMCQs) || 0) + (parseInt(numCoding) || 0) : 0,
+        scheduledAt: new Date(scheduledAt),
+        scheduleTill: new Date(scheduleTill),
+        duration: parseInt(duration) || 60
+    }, { new: true });
+
+    if (!updatedExam) return res.status(404).send("Exam not found.");
+
+    res.redirect("/admin");
+} catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+}
+}
+
+exports.deleteExam = async (req, res) => {
+    try {
+        const deletedExam = await Exam.findByIdAndDelete(req.params.examId);
+        if (!deletedExam) return res.status(404).send("Exam not found.");
+        res.redirect("/admin");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server error");
+    }
+}

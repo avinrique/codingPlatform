@@ -1,13 +1,19 @@
 const User = require('./../models/usermodel')
-
+const { v4: uuidv4 } = require('uuid');
 exports.getprofilecontrol = async(req,res)=>{
     if(req.isAuthenticated()){
         const Userprofile = await User.findById({_id : req.user.id})
         if(!Userprofile){
             console.log("no data found")
         }else{
+            if(Userprofile.usertype == "admin"){
+                res.render('adminprofile' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : "" ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone , department : "" , sem : "" , year : "" , rollno : "" , usertype : Userprofile.usertype })
+            }else if(Userprofile.usertype == "teacher"){
+                res.render('profile' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : "" ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone , department : Userprofile.Department , sem : "" , year : "" , rollno : "" , usertype : Userprofile.usertype })
+            }else{
+                res.render('profile' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : Userprofile.USN ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone , department : Userprofile.Department , sem : Userprofile.Semester , year : Userprofile.Year , rollno : Userprofile.Rollno , usertype : Userprofile.usertype })
+            }
             
-            res.render('profile' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : Userprofile.USN ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone , department : Userprofile.Department , sem : Userprofile.Semester , year : Userprofile.Year , rollno : Userprofile.Rollno , usertype : Userprofile.usertype })
         }
     }else{
         res.redirect('/')
@@ -20,58 +26,60 @@ exports.getprofile_editcontrol = async(req,res)=>{
         const Userprofile = await User.findById({_id : req.user.id})
         if(!Userprofile){
             console.log("no data found")
-        }else{
-            
-            res.render('profile_edit' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : Userprofile.USN ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone , department : Userprofile.Department , sem : Userprofile.Semester , year : Userprofile.Year , rollno : Userprofile.Rollno , usertype : Userprofile.usertype })
+        }else{ 
+            if(Userprofile.usertype == "admin"){
+                res.render('profile_edit' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : "" ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone , department : "" , sem : "" , year : "" , rollno : "" , usertype : Userprofile.usertype })
+            }else if(Userprofile.usertype == "teacher"){
+                res.render('profile_edit' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : "" ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone , department : Userprofile.Department , sem : "" , year : "" , rollno : "" , usertype : Userprofile.usertype })
+            }else{
+                res.render('profile_edit' ,{name : Userprofile.fname  ,email : Userprofile.email, USN : Userprofile.USN ,  pic : Userprofile.imageurl ,location : Userprofile.location ,phone :Userprofile.phone , department : Userprofile.Department , sem : Userprofile.Semester , year : Userprofile.Year , rollno : Userprofile.Rollno , usertype : Userprofile.usertype })
+            }
         }
     }else{
         res.redirect('/')
     } 
 }
-exports.profile_editcontrol = async(req,res)=>{
-    console.log("profile edit control testing")
-    if(req.isAuthenticated()){
-       if(!req.file){
-         UpadteProfile = await User.findOneAndUpdate({_id : req.user.id}, {
-            
-            location : req.body.location, phone :req.body.number , fname : req.body.name , Semester : req.body.sem 
-            
-              
-      }, { new: true })
-       }
 
 
-        if (req.file) {
-            newImageUrl = '/uploads/' + req.file.filename; // Store new image path
-            UpadteProfile = await User.findOneAndUpdate({_id : req.user.id}, {
-            
-                location : req.body.location, phone :req.body.number , fname : req.body.name ,  Semester : req.body.sem ,
-                imageurl: newImageUrl, 
-                  
-          }, { new: true })
+
+exports.profile_editcontrol = async (req, res) => {
+    console.log("Profile edit control testing");
+
+    if (!req.isAuthenticated()) {
+        return res.redirect('/');
+    }
+    console.log(req.body);
+    let updateFields = {
+        fname: req.body.name,
+        phone: req.body.number,
+        location: req.body.location
+    };
+
+    if (req.user.usertype === "student") {
+        updateFields.Semester = req.body.sem;
+    } else if (req.user.usertype === "teacher") {
+        updateFields.department = req.body.department;
+    }
+
+    if (req.file) {
+        updateFields.imageurl = '/uploads/' + req.file.filename;
+    }
+
+    try {
+        const updatedProfile = await User.findByIdAndUpdate(req.user.id, updateFields, { new: true });
+
+        if (!updatedProfile) {
+            console.log("Profile not updated");
+        } else {
+            console.log(updatedProfile);
         }
 
-
-    
-
-        if(!UpadteProfile){
-            console.log("profile not updated")
-        }else{
-            console.log(UpadteProfile)
-            res.redirect('/profile')
-        }
-
-        
-        
-
-
-
-
-      }else{
-          res.redirect('/')
-      }
-}
-
+        res.redirect('/profile');
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
 
 
 

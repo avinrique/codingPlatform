@@ -58,6 +58,10 @@ const UserSchema = new mongoose.Schema({
             
         }
         ,
+        admin_access : {
+            default : false ,
+            type : Boolean,
+            },
         Rollno : {
             type : String ,
             

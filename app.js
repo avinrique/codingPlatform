@@ -139,11 +139,10 @@ passport.serializeUser(function(user, done) {
 //Routes handler
 const home = require('./routes/home')
 const dashboard = require('./routes/dashboard');
-
+const admin = require('./routes/admin')
 const authenticateing = require('./routes/authenticate')
 const profile = require('./routes/profile')
 const userauth = require('./routes/userauth')
-const create_exam = require('./routes/examRoutes')
 
 
 app.get('/logout', async (req, res, next) => {
@@ -163,11 +162,11 @@ app.get("/check", async (req,res)=>{
 //using routes middleware
 app.use('/',home )
 app.use('/dashboard',dashboard)
-
+app.use('/admin' ,admin)
 app.use('/authenticate',authenticateing)
 app.use('/profile',profile)
 app.use('/user' , userauth)
-app.use('/exam' , create_exam)
+
 /*
 */
 app.all('*', async (req,res,next)=>{
