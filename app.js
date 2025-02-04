@@ -83,34 +83,44 @@ const { send, type } = require('express/lib/response');
 const { authenticate } = require('passport');
 const { result } = require('lodash');
 const { buffer } = require('stream/consumers');
-
+passport.use(User.createStrategy());
 
 // passport.use(new LocalStrategy({usernameField : 'email'},User.authenticate()));
+
 passport.use(new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
-  console.log(email)
-  console.log(password)
   try {
-      const user = await User.findOne({ email : email });
-      console.log(user)
+     
+      const user = await User.findOne({ email: email });
+
+     
       if (!user) {
           return done(null, false, { message: 'No user found with this email' });
       }
-     
 
+   
       if (!user.userallowed) {
           return done(null, false, { message: 'Verify your account to log in' });
-      }   
-      console.log(password)
-      const isValidPassword = await user.authenticate(password);
-      if (!isValidPassword) {
-          return done(null, false, { message: 'Incorrect password' });
       }
-      return done(null, user);
+
+     
+      user.authenticate(password, (err, user, msg) => {
+          if (err) {
+              return done(err);
+          }
+          if (!user) {
+              return done(null, false, { message: msg || 'Incorrect password' });
+          }
+
+        
+          return done(null, user);
+      });
+      
   } catch (err) {
-   
       return done(err);
   }
 }));
+
+
 
 //using limiter to limit usages
 

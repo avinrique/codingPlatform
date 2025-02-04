@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= exam.name %> - Test</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1><%= exam.name %> - Test</h1>
+    <form action="/dashboard/submit-test" method="POST">
+        <input type="hidden" name="examId" value="<%= exam._id %>">
+
+        <% exam.mcqQuestions.forEach((question, index) => { %>
+            <div>
+                <p><strong>Q<%= index + 1 %>:</strong> <%= question.question %></p>
+                <% question.options.forEach((option, idx) => { %>
+                    <label>
+                        <input type="radio" name="mcq-<%= question._id %>" value="<%= option %>">
+                        <%= option %>
+                    </label>
+                <% }); %>
+            </div>
+        <% }); %>
+
+        <% exam.codingQuestions.forEach((question, index) => { %>
+            <div>
+                <p><strong>Q<%= index + 1 + exam.mcqQuestions.length %>:</strong> <%= question.question %></p>
+                <textarea name="coding-<%= question._id %>" rows="5" cols="50" placeholder="Write your code here..."></textarea>
+            </div>
+        <% }); %>
+
+        <button type="submit">Submit Test</button>
+    </form>
+</body>
+</html>

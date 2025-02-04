@@ -5,4 +5,6 @@ const router = express.Router()
 const dashboardcontroller =  require('./../controllers/dashboardcontroller')
 
 router.route("/").get(dashboardcontroller.getcontrol)
+router.route("/start-test/:examId").get(dashboardcontroller.getStartExam)
+router.route("/submit-test").post(dashboardcontroller.postStartExam)
 module.exports=router
