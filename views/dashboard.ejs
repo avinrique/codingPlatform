@@ -191,6 +191,7 @@ if (apples === "true") {
                             <h5 class="mb-1"><%= exam.name %></h5>
                             <p class="mb-1">Type: <strong><%= exam.questionType.toUpperCase() %></strong></p>
                             <p class="mb-1">Duration: <strong><%= exam.duration %> minutes</strong></p>
+                            <p class="mb-1">Scheduled At: <strong><%= new Date(exam.scheduledAt).toLocaleString() %></strong></p>
                             <p class="mb-1">Scheduled Till: <strong><%= new Date(exam.scheduledTill).toLocaleString() %></strong></p>
                             <form action="/start-test/<%= exam._id %>" method="GET">
                                 <button type="submit" class="btn btn-primary mt-2">Start Test</button>

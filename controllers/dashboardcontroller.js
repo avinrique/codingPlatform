@@ -1,32 +1,42 @@
-const User = require('./../models/usermodel')  
+const User = require("./../models/usermodel");
 const Exam = require("../models/Exam");
-exports.getcontrol = async(req,res)=>{
-    if(req.isAuthenticated()){
+
+exports.getcontrol = async (req, res) => {
+    if (req.isAuthenticated()) {
         try {
-            const student = await User.findById(req.user._id); // Assuming authentication is handled
-        
+            const student = await User.findById(req.user._id); // Get the logged-in student
+
             if (!student) return res.status(404).json({ error: "Student not found" });
 
+            // Get the current date and time
+            const currentTime = new Date();
+
+            // Find exams that match the student's semester and department and are within the valid schedule range
             const exams = await Exam.find({
                 semester: student.Semester,
                 departments: student.Department,
-                // scheduledAt: { $lte: new Date() }, // Show only exams that are scheduled
-                // scheduledTill: { $gte: new Date() } // Hide exams whose time has expired
+                scheduledAt: { $lte: currentTime },  // Exam should have started
+                scheduledTill: { $gte: currentTime } // Exam should not have ended
             });
-            console.log(exams)
-            const Userprofile = await User.findById({_id : req.user.id})
-            res.render('dashboard' ,{  pic : Userprofile.imageurl , logged_in :"true" , exams , user:req.user})
-    
+
+            console.log(exams);
+            
+            const Userprofile = await User.findById(req.user.id);
+            res.render("dashboard", { 
+                pic: Userprofile.imageurl, 
+                logged_in: "true", 
+                exams, 
+                user: req.user 
+            });
+
         } catch (error) {
             res.status(500).json({ error: "Server Error" });
         }
-       
+    } else {
+        res.redirect("/");
     }
-    else{
-        res.redirect('/')
-    }
-    
-}
+};
+
 
 
 
