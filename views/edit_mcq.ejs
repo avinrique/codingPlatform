@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit MCQ Question</title>
+</head>
+<body>
+    <h1>Edit MCQ Question</h1>
+    <form action="/admin/exam/<%= examId %>/edit/mcq/<%= mcq._id %>" method="POST">
+        <label>Question:</label>
+        <input type="text" name="question" value="<%= mcq.question %>" required>
+        
+        <label>Options:</label>
+        <input type="text" name="options[0]" value="<%= mcq.options[0] %>" required>
+        <input type="text" name="options[1]" value="<%= mcq.options[1] %>" required>
+        <input type="text" name="options[2]" value="<%= mcq.options[2] %>" required>
+        <input type="text" name="options[3]" value="<%= mcq.options[3] %>" required>
+
+        <label>Correct Answer:</label>
+        <input type="text" name="correctAnswer" value="<%= mcq.correctAnswer %>" required>
+
+        <label>Marks:</label>
+        <input type="number" name="marks" value="<%= mcq.marks %>" required>
+
+        <button type="submit">Update MCQ</button>
+    </form>
+
+    <form action="/admin/exam/<%= examId %>/delete/mcq/<%= mcq._id %>" method="POST">
+        <button type="submit" onclick="return confirm('Are you sure?')">Delete Question</button>
+    </form>
+
+    <a href="/admin/exam/questions/<%= examId %>">Back to Questions</a>
+</body>
+</html>

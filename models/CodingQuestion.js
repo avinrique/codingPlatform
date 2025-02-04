@@ -1,12 +1,21 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const CodingQuestionSchema = new mongoose.Schema({
-    question: { type: String, required: true },
-    exampleInput: { type: String, required: true },
-    exampleOutput: { type: String, required: true },
-    constraints: { type: String, required: true },  // For example, input/output size constraints
+
+
+    questionTile: { type: String, required: true },
+    questiontext: { type: String, required: true },
+    constraits: { type: String, required: true },
+    inputFormat: { type: String, required: true },
+    outputFormat: { type: String, required: true },
+    sampleInput: { type: String, required: true },
+    sampleOutput: { type: String, required: true },
+    solutionTemplate: { type: String, required: true }, 
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, default: Date.now },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+    marks: { type: Number, default: 0 }, 
+
+    
 });
 
-module.exports = mongoose.model("CodingQuestion", CodingQuestionSchema);
+module.exports = mongoose.model('CodingQuestion', CodingQuestionSchema);

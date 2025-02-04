@@ -1,0 +1,30 @@
+<form action="/admin/exam/<%= examId %>/add/coding" method="POST">
+    <label>Title:</label>
+    <input type="text" name="questionTile" required><br>
+
+    <label>Question Text:</label>
+    <textarea name="questiontext" required></textarea><br>
+
+    <label>Constraints:</label>
+    <textarea name="constraits" required></textarea><br>
+
+    <label>Input Format:</label>
+    <textarea name="inputFormat" required></textarea><br>
+
+    <label>Output Format:</label>
+    <textarea name="outputFormat" required></textarea><br>
+
+    <label>Sample Input:</label>
+    <textarea name="sampleInput" required></textarea><br>
+
+    <label>Sample Output:</label>
+    <textarea name="sampleOutput" required></textarea><br>
+
+    <label>Solution Template:</label>
+    <textarea name="solutionTemplate" required></textarea><br>
+    <label>Marks:</label>
+    <input name="marks" required type="number"><br>
+
+
+    <button type="submit">Add Coding Question</button>
+</form>

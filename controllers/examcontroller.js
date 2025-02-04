@@ -1,6 +1,6 @@
 // controllers/examController.js
 const Exam = require("../models/Exam");
-const Question = require("../models/Question");
+
 
 const User = require('./../models/usermodel')
 const { v4: uuidv4 } = require('uuid');

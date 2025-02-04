@@ -1,0 +1,15 @@
+<form action="/admin/exam/<%= examId %>/add/mcq" method="POST">
+    <label>Question:</label>
+    <input type="text" name="question" required><br>
+
+    <label>Options (comma-separated):</label>
+    <input type="text" name="options" required><br>
+
+    <label>Correct Answer:</label>
+    <input type="text" name="correctAnswer" required><br>
+
+    <label>Marks:</label>
+    <input type="number" name="marks" value="1" required><br>
+
+    <button type="submit">Add MCQ</button>
+</form>

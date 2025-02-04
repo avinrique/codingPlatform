@@ -1,5 +1,4 @@
 const Exam = require("../models/Exam");
-const Question = require("../models/Question");
 const sendEmails = require('./../utils/email')
 const User = require('./../models/usermodel')
 const { v4: uuidv4 } = require('uuid');
