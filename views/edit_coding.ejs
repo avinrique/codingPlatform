@@ -7,13 +7,13 @@
     <h1>Edit Coding Question</h1>
     <form action="/admin/exam/<%= examId %>/edit/coding/<%= codingQuestion._id %>" method="POST">
         <label>Title:</label>
-        <input type="text" name="questionTitle" value="<%= codingQuestion.questionTitle %>" required>
+        <input type="text" name="questionTile" value="<%= codingQuestion.questionTile %>" required>
 
         <label>Question:</label>
         <textarea name="questiontext" required><%= codingQuestion.questiontext %></textarea>
 
         <label>Constraints:</label>
-        <input type="text" name="constraints" value="<%= codingQuestion.constraints %>" required>
+        <input type="text" name="constraits" value="<%= codingQuestion.constraits %>" required>
 
         <label>Input Format:</label>
         <input type="text" name="inputFormat" value="<%= codingQuestion.inputFormat %>" required>
@@ -37,6 +37,6 @@
         <button type="submit" onclick="return confirm('Are you sure?')">Delete Question</button>
     </form>
 
-    <a href="admin/exam/questions/<%= examId %>">Back to Questions</a>
+    <a href="/admin/exam/questions/<%= examId %>">Back to Questions</a>
 </body>
 </html>
