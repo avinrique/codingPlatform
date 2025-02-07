@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
         email : {
            type : String ,
             minlength : 4 , 
-            maxlength : 25 ,
+            maxlength : 55 ,
             trim : true , 
             default : "N  /  A",
             unique : true ,

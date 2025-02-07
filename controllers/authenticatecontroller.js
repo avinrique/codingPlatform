@@ -22,6 +22,8 @@ exports.getlogincontrol = (req,res)=>{
             email: req.body.email, 
             password: req.body.password
         })
+        const test = User.findOne({})
+
        await req.login(user,function(err){
             if(err){
                 console.log(err)

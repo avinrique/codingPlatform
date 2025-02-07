@@ -1,144 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Edit Exam</title>
-</head>
-<body>
-    <h1>Edit Exam - <%= exam.name %></h1>
-<form action="/admin/exam/<%= exam._id %>" method="POST">
-        <label>Name:</label>
-        <input type="text" name="name" value="<%= exam.name %>" required><br>
-
-        <label>Departments:</label>
-        <input type="text" name="departments" value="<%= exam.departments.join(', ') %>" required><br>
-
-        <label>Semester:</label>
-        <input type="number" name="semester" value="<%= exam.semester %>" min="1" max="8" required><br>
-
-        <label>Question Type:</label>
-        <select name="questionType">
-            <option value="mcq" <%= exam.questionType === "mcq" ? "selected" : "" %>>MCQ</option>
-            <option value="coding" <%= exam.questionType === "coding" ? "selected" : "" %>>Coding</option>
-            <option value="mcq&coding" <%= exam.questionType === "mcq&coding" ? "selected" : "" %>>MCQ + Coding</option>
-        </select><br>
-
-        <label>MCQs:</label>
-        <input type="number" name="numMCQs" value="<%= exam.numMCQs %>"><br>
-
-        <label>Coding Questions:</label>
-        <input type="number" name="numCoding" value="<%= exam.numCoding %>"><br>
-
-        <label>Total Questions:</label>
-        <input type="number" name="numTotalQuestions" value="<%= exam.numTotalQuestions %>" required><br>
-
-        <label>Start Time:</label>
-        <input type="datetime-local" name="scheduledAt" value="<%= exam.scheduledAt.toISOString().slice(0,16) %>" required><br>
-
-        <label>End Time:</label>
-        <input type="datetime-local" name="scheduleTill" 
-            value="<%= exam.scheduleTill ? exam.scheduleTill.toISOString().slice(0,16) : '' %>" 
-            required><br>
-
-        <label>Duration (minutes):</label>
-        <input type="number" name="duration" value="<%= exam.duration %>" required><br>
-
-        <button type="submit">Save Changes</button>
-    </form> 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <form action="/admin/exam/<%= exam._id %>" method="POST">
-    <label>Exam Name:</label>
-    <input type="text" name="name" value="<%= exam.name %>" required>
-
-    <label>Departments:</label><br>
-    <% ["mc", "is", "cs", "et", "ec", "ai", "cv"].forEach(dept => { %>
-        <input type="checkbox" name="departments" value="<%= dept %>" 
-            <%= exam.departments.includes(dept) ? "checked" : "" %>> <%= dept.toUpperCase() %>
-    <% }) %>
-
-    <label>Semester:</label>
-    <input type="number" name="semester" min="1" max="8" value="<%= exam.semester %>" required>
-
-    <label>Question Type:</label>
-    <select id="questionType" name="questionType" onchange="toggleQuestionFields()" required>
-        <option value="mcq" <%= exam.questionType === "mcq" ? "selected" : "" %>>MCQ</option>
-        <option value="coding" <%= exam.questionType === "coding" ? "selected" : "" %>>Coding</option>
-        <option value="mcq&coding" <%= exam.questionType === "mcq&coding" ? "selected" : "" %>>MCQ + Coding</option>
-    </select>
-
-    <div id="mcqFields">
-        <label>Number of MCQ Questions:</label>
-        <input type="number" name="numMCQs" id="numMCQs" value="<%= exam.numMCQs || '' %>">
-    </div>
-
-    <div id="codingFields">
-        <label>Number of Coding Questions:</label>
-        <input type="number" name="numCoding" id="numCoding" value="<%= exam.numCoding || '' %>">
-    </div>
-
-    <div id="totalQuestionFields">
-        <label>Total Questions:</label>
-        <input type="number" name="numTotalQuestions" id="numTotalQuestions" value="<%= exam.numMCQs + exam.numCoding || '' %>">
-    </div>
-
-    <label>Duration (minutes):</label>
-    <input type="number" name="duration" value="<%= exam.duration || '' %>" required>
-
-    <label>Scheduled At:</label>
-    <input type="datetime-local" name="scheduledAt" value="<%= exam.scheduledAt ? exam.scheduledAt.toISOString().slice(0,16) : '' %>" required>
-
-    <label>Scheduled Till:</label>
-    <input type="datetime-local" name="scheduledTill" value="<%= exam.scheduledTill ? exam.scheduledTill.toISOString().slice(0,16) : '' %>" required>
-
-    <button type="submit">Update Exam</button>
-</form>
-
-<script>
-    function toggleQuestionFields() {
-        const type = document.getElementById("questionType").value;
-        document.getElementById("mcqFields").style.display = type === "mcq" || type === "mcq&coding" ? "block" : "none";
-        document.getElementById("codingFields").style.display = type === "coding" || type === "mcq&coding" ? "block" : "none";
-        document.getElementById("totalQuestionFields").style.display = type === "mcq&coding" ? "block" : "none";
-    }
-    toggleQuestionFields();
-</script>
-
-</body>
-</html> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -234,14 +93,15 @@
                 <div class="mb-3">
                     <label for="scheduledAt" class="form-label">Scheduled At:</label>
                     <input type="datetime-local" id="scheduledAt" name="scheduledAt" class="form-control" 
-                        value="<%= exam.scheduledAt ? exam.scheduledAt.toISOString().slice(0,16) : '' %>" required>
+                        value="<%= exam.scheduledAt ? new Date(exam.scheduledAt).toISOString().slice(0,16) : '' %>" required>
                 </div>
-
+                
                 <div class="mb-3">
-                    <label for="scheduledTill" class="form-label">Scheduled Till:</label>
-                    <input type="datetime-local" id="scheduledTill" name="scheduledTill" class="form-control" 
-                        value="<%= exam.scheduledTill ? exam.scheduledTill.toISOString().slice(0,16) : '' %>" required>
+                    <label for="scheduleTill" class="form-label">Scheduled Till:</label>
+                    <input type="datetime-local" id="scheduleTill" name="scheduleTill" class="form-control" 
+                        value="<%= exam.scheduleTill ? new Date(exam.scheduleTill).toISOString().slice(0,16) : '' %>" required>
                 </div>
+                
 
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary">Update Exam</button>
@@ -249,6 +109,43 @@
             </form>
         </div>
     </div>
+    <script>
+        function convertToLocalTime(inputId) {
+            const inputElement = document.getElementById(inputId);
+            if (inputElement && inputElement.value) {
+                let utcDate = new Date(inputElement.value);
+    
+                if (isNaN(utcDate.getTime())) {
+                    console.warn(`Invalid date in input ${inputId}:`, inputElement.value);
+                    return;
+                }
+                
+                // Convert UTC to local timezone
+                let localDate = new Date(utcDate.getTime() - (utcDate.getTimezoneOffset() * 60000));
+    
+                let year = localDate.getFullYear();
+                let month = String(localDate.getMonth() + 1).padStart(2, '0');
+                let day = String(localDate.getDate()).padStart(2, '0');
+                let hours = String(localDate.getHours()).padStart(2, '0');
+                let minutes = String(localDate.getMinutes()).padStart(2, '0');
+    
+                let formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                console.log(`Setting value for ${inputId}:`, formattedDateTime);
+                inputElement.value = formattedDateTime;
+            }
+        }
+    
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(() => {
+                convertToLocalTime("scheduledAt");
+                convertToLocalTime("scheduleTill");
+            }, 1000); // Slight delay to ensure the input fields are populated
+        });
+    </script>
+    
+
+    
+    
 
     <script>
         function toggleQuestionFields() {

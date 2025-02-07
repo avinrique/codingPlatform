@@ -12,7 +12,7 @@ const ExamSchema = new mongoose.Schema({
     codingQuestions: [{ type: mongoose.Schema.Types.ObjectId, ref: "CodingQuestion" }],
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     scheduledAt: { type: Date },
-    scheduledTill: { type: Date },
+    scheduleTill: { type: Date },
     duration: { type: Number },
     integrityCheck: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now }

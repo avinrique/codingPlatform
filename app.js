@@ -8,7 +8,7 @@ const User = require('./models/usermodel')
 
 
 // declaring passport and sessions
-
+const flash = require('connect-flash');
 const session = require('express-session')
 const _ = require("lodash");
 const passport = require('passport')
@@ -75,7 +75,12 @@ app.use(session({
     httpOnly : true
 }))
 
+app.use(flash());
 
+app.use((req, res, next) => {
+    res.locals.successMessage = req.flash('success');
+    next();
+});
 //using passport middlewares
 app.use(passport.initialize());
 app.use(passport.session())
