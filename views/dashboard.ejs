@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <title>EAT - Dashboard</title>
+    <p hidden id="logged"><%=logged_in %></p>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -47,6 +48,11 @@
         </div>
     </nav>
 
+    <style>
+      video, canvas {
+    display: none;
+}
+    </style>
     <div class="container mt-5">
         <header class="text-center">
             <h1>Welcome, <%= user.fname %> <%= user.lname %></h1>
@@ -68,9 +74,11 @@
                   <% if (exam.alreadyGiven) { %>
                       <button class="btn btn-secondary mt-2" disabled>Exam Already Taken</button>
                   <% } else { %>
-                      <form action="/dashboard/start-test/<%= exam._id %>" method="GET">
+                      <!-- <form action="/dashboard/start-test/<%= exam._id %>" method="GET">
                           <button type="submit" class="btn btn-primary mt-2">Start Test</button>
-                      </form>
+                      </form> -->
+                      <button class="btn btn-primary mt-2 start-test-btn" data-exam-id="<%= exam._id %>">Start Test</button>
+
                   <% } %>
               </div>
           <% }); %>
@@ -85,6 +93,69 @@
           </button>
       </div>
   <% } %>
+
+
+
+  <!-- Exam Rules & Camera Permission Modal -->
+<div class="modal fade" id="examRulesModal" tabindex="-1" role="dialog" aria-labelledby="examRulesModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="examRulesModalLabel">Exam Rules & Permissions</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Rules for Examination:</strong></p>
+        <ul>
+          <li>Ensure you are alone in the room.</li>
+          <li>Do not navigate away from the exam window.</li>
+          <li>Keep your camera on at all times.</li>
+          <li>Any suspicious activity may result in disqualification.</li>
+        </ul>
+        <p><strong>Camera Access:</strong></p>
+        <p>We need to turn on your camera for proctoring. Click "Allow" when prompted.</p>
+        <button id="requestCamera" class="btn btn-secondary">Enable Camera</button>
+        <p id="cameraStatus" class="text-muted mt-2"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button id="confirmStartTest" class="btn btn-primary" disabled>Start Test</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  let selectedExamId = null;
+
+  // Open Modal on "Start Test" button click
+  document.querySelectorAll('.start-test-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      selectedExamId = this.getAttribute('data-exam-id');
+      $('#examRulesModal').modal('show');
+    });
+  });
+
+  // Handle Camera Permission Request
+  document.getElementById('requestCamera').addEventListener('click', async function() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      document.getElementById('cameraStatus').innerHTML = "✅ Camera access granted!";
+      document.getElementById('confirmStartTest').removeAttribute('disabled');
+    } catch (error) {
+      document.getElementById('cameraStatus').innerHTML = "❌ Camera access denied. You must allow it to proceed.";
+    }
+  });
+
+  // Start the test when confirmed
+  document.getElementById('confirmStartTest').addEventListener('click', function() {
+    if (selectedExamId) {
+      window.location.href = `/dashboard/start-test/${selectedExamId}`;
+    }
+  });
+</script>
+
     <script>
         var loggedIn = document.getElementById("logged").innerHTML;
         if (loggedIn === "true") { 

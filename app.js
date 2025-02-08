@@ -13,7 +13,7 @@ const session = require('express-session')
 const _ = require("lodash");
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
-
+const path = require('path')
 
 
 const rateLimit = require('express-rate-limit')
@@ -35,19 +35,9 @@ mongoose.connect(dburl,
     console.log("connected to database")
 })
 app.use('/uploads', express.static('uploads'));
-//multer
-// var fs = require('fs');
-// var path = require('path');
-// const multer = require('multer')
-// var storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//       cb(null, 'uploads')
-//   },
-//   filename: (req, file, cb) => {
-//       cb(null, file.fieldname + '-' + Date.now())
-//   }
-// });
-// upload = multer({ storage: storage });
+
+
+const multer = require('multer')
 
 
 //using middlewares
@@ -58,7 +48,9 @@ app.use(hpp())
 app.use(xss())
 app.use(express.static("public"));
 app.use(express.json())
-app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(bodyParser.json({ limit: '100mb', parameterLimit: 100000  })); // Adjust the limit as needed
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true, parameterLimit: 100000 }));
 /*
 
 
@@ -175,6 +167,125 @@ app.get("/check", async (req,res)=>{
   console.log(user)
 })
 //using routes middleware
+
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'intrigity/'); // Destination folder
+  },
+  filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, `captured-${uniqueSuffix}${path.extname(file.originalname)}`); // Generate unique filename
+  }
+});
+
+// Multer File Filter (Accept Only Images)
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = /jpeg|jpg|png/;
+  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowedTypes.test(file.mimetype);
+
+  if (extname && mimetype) {
+      return cb(null, true);
+  }
+  cb(new Error('Only images (JPEG, JPG, PNG) are allowed!'));
+};
+
+// Multer Upload Configuration
+const upload = multer({ 
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const Integrity = require('./models/Integrity');
+
+app.post('/update-integrity', async (req, res) => {
+    try {
+        const { examId, userId, eventType } = req.body;
+
+        const updateFields = {};
+        switch (eventType) {
+            case 'tabChange':
+                updateFields.tabChanges = 1;
+                break;
+            case 'mouseOut':
+                updateFields.mouseOuts = 1;
+                break;
+            case 'fullscreenExit':
+                updateFields.fullscreenExits = 1;
+                break;
+            case 'copyAttempt':
+                updateFields.copyAttempts = 1;
+                break;
+            case 'pasteAttempt':
+                updateFields.pasteAttempts = 1;
+                break;
+            case 'focusChange':
+                updateFields.focusChanges = 1;
+                break;
+            default:
+                return res.status(400).json({ error: "Invalid event type" });
+        }
+
+        const integrityRecord = await Integrity.findOneAndUpdate(
+            { examId, userId }, // Find existing record
+            { 
+                $inc: updateFields, // Increment only the relevant field
+                lastEvent: eventType
+            },
+            { upsert: true, new: true } // Create if not exists, return updated
+        );
+
+        res.status(200).json({ message: "Integrity data updated", data: integrityRecord });
+    } catch (error) {
+        console.error("Error updating integrity data:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+// API Route to Handle Image Uploads
+app.post('/save-image', upload.single('image'), (req, res) => {
+  if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+  }
+
+  console.log('Image saved successfully:', req.file.path);
+  res.json({ success: true, filename: req.file.path });
+});
+
 app.use('/',home )
 app.use('/dashboard',dashboard)
 app.use('/admin' ,admin)
