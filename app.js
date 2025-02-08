@@ -231,50 +231,96 @@ const upload = multer({
 
 
 const Integrity = require('./models/Integrity');
-
 app.post('/update-integrity', async (req, res) => {
-    try {
-        const { examId, userId, eventType } = req.body;
+  const { examId, userId, eventType } = req.body;
+  // mouseOuts=0
+  // console.log(eventType)
+  // if(eventType == "mouseOuts"){
+  //   mouseOuts == 1
+  // }
+  // await Integrity.updateOne(
+  //     { examId, userId, mouseOuts },
+  //     { $inc: { count: 1 }, $setOnInsert: { createdAt: new Date() } },
+  //     { upsert: true }
+  // );
 
-        const updateFields = {};
-        switch (eventType) {
-            case 'tabChange':
-                updateFields.tabChanges = 1;
-                break;
-            case 'mouseOut':
-                updateFields.mouseOuts = 1;
-                break;
-            case 'fullscreenExit':
-                updateFields.fullscreenExits = 1;
-                break;
-            case 'copyAttempt':
-                updateFields.copyAttempts = 1;
-                break;
-            case 'pasteAttempt':
-                updateFields.pasteAttempts = 1;
-                break;
-            case 'focusChange':
-                updateFields.focusChanges = 1;
-                break;
-            default:
-                return res.status(400).json({ error: "Invalid event type" });
-        }
+  // res.json({ success: true, message: "Integrity event updated." });
+  const eventFieldMap = {
+    tabChanges: "tabChanges",
+    mouseOuts: "mouseOuts",
+    fullscreenExits: "fullscreenExits",
+    copyAttempts: "copyAttempts",
+    pasteAttempts: "pasteAttempts",
+    focusChanges: "focusChanges"
+};
 
-        const integrityRecord = await Integrity.findOneAndUpdate(
-            { examId, userId }, // Find existing record
-            { 
-                $inc: updateFields, // Increment only the relevant field
-                lastEvent: eventType
-            },
-            { upsert: true, new: true } // Create if not exists, return updated
-        );
+// Check if the eventType is valid
+if (!eventFieldMap[eventType]) {
+    return res.status(400).json({ success: false, message: "Invalid event type." });
+}
 
-        res.status(200).json({ message: "Integrity data updated", data: integrityRecord });
-    } catch (error) {
-        console.error("Error updating integrity data:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+const updateField = eventFieldMap[eventType];
+console.log(eventFieldMap)
+try {
+    await Integrity.updateOne(
+        { examId, userId },
+        { 
+            $inc: { [updateField]: 1 },  // Increment the correct field
+            $set: { lastEvent: eventType }
+        },
+        { upsert: true }  // Create a new document if it doesn't exist
+    );
+
+    res.json({ success: true, message: `Integrity event '${eventType}' updated.` });
+} catch (error) {
+    console.error("Error updating integrity event:", error);
+    res.status(500).json({ success: false, message: "Internal server error." });
+}
 });
+
+// app.post('/update-integrity', async (req, res) => {
+//     try {
+//         const { examId, userId, eventType } = req.body;
+
+//         const updateFields = {};
+//         switch (eventType) {
+//             case 'tabChange':
+//                 updateFields.tabChanges = 1;
+//                 break;
+//             case 'mouseOut':
+//                 updateFields.mouseOuts = 1;
+//                 break;
+//             case 'fullscreenExit':
+//                 updateFields.fullscreenExits = 1;
+//                 break;
+//             case 'copyAttempt':
+//                 updateFields.copyAttempts = 1;
+//                 break;
+//             case 'pasteAttempt':
+//                 updateFields.pasteAttempts = 1;
+//                 break;
+//             case 'focusChange':
+//                 updateFields.focusChanges = 1;
+//                 break;
+//             default:
+//                 return res.status(400).json({ error: "Invalid event type" });
+//         }
+
+//         const integrityRecord = await Integrity.findOneAndUpdate(
+//             { examId, userId }, // Find existing record
+//             { 
+//                 $inc: updateFields, // Increment only the relevant field
+//                 lastEvent: eventType
+//             },
+//             { upsert: true, new: true } // Create if not exists, return updated
+//         );
+
+//         res.status(200).json({ message: "Integrity data updated", data: integrityRecord });
+//     } catch (error) {
+//         console.error("Error updating integrity data:", error);
+//         res.status(500).json({ error: "Internal Server Error" });
+//     }
+// });
 
 // API Route to Handle Image Uploads
 app.post('/save-image', upload.single('image'), (req, res) => {
