@@ -1,59 +1,27 @@
-<!-- createExam.html -->
-<form id="examForm">
-    <label for="department">Department:</label>
-    <select id="department" name="department">
-        <option value="MCA">MCA</option>
-        <option value="ISE">ISE</option>
-        <option value="CSE">CSE</option>
-        <option value="ETE">ETE</option>
-        <option value="CIV">CIV</option>
-        <option value="COM">COM</option>
-        <option value="AI">AI</option>
-    </select>
-    
-    <label for="semester">Semester:</label>
-    <input type="number" id="semester" name="semester" min="1" max="8" required>
-    
-    <label for="questionType">Question Type:</label>
-    <select id="questionType" name="questionType">
-        <option value="mcq">MCQ</option>
-        <option value="coding">Coding</option>
-    </select>
-    
-    <label for="numMCQs">Number of MCQs:</label>
-    <input type="number" id="numMCQs" name="numMCQs" min="1" required>
-    
-    <label for="numCoding">Number of Coding Questions:</label>
-    <input type="number" id="numCoding" name="numCoding" min="1" required>
-    
-    <label for="duration">Duration (in minutes):</label>
-    <input type="number" id="duration" name="duration" required>
-    
-    <label for="scheduledAt">Scheduled At:</label>
-    <input type="datetime-local" id="scheduledAt" name="scheduledAt" required>
-    
-    <button type="submit">Create Exam</button>
-</form>
 
-<script>
-document.getElementById('examForm').addEventListener('submit', function(event) {
-    event.preventDefault();
 
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Program - 3</title>
+ <style>
+  p { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+ </style>
+</head>
+<body>
+ <p id="demo"></p>
+ <script>
+s = 5;
+g = true
+p = document.getElementById("demo")
+setInterval(()=>{
+    p.innerHTML = `TEXT ${g ? "Growing" : "shrinking"}`
+    p.style = `font-size : ${s}px; color : ${g ? "red" : "blue"};`
+    s += g ? 5 :-5
+    if(s>= 50 || s<= 5) g = !g
 
-    fetch('/api/exams/create', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert('Exam created successfully!');
-    })
-    .catch(error => console.error('Error:', error));
-});
-</script>
+},1000)
+ </script>
+</body>
+</html>

@@ -166,21 +166,20 @@ app.get("/check", async (req,res)=>{
   const user = await User.find();
   console.log(user)
 })
-//using routes middleware
 
 
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-      cb(null, 'intrigity/'); // Destination folder
+      cb(null, 'intrigity/'); 
   },
   filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      cb(null, `captured-${uniqueSuffix}${path.extname(file.originalname)}`); // Generate unique filename
+      cb(null, `captured-${uniqueSuffix}${path.extname(file.originalname)}`); 
   }
 });
 
-// Multer File Filter (Accept Only Images)
+
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /jpeg|jpg|png/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -192,59 +191,18 @@ const fileFilter = (req, file, cb) => {
   cb(new Error('Only images (JPEG, JPG, PNG) are allowed!'));
 };
 
-// Multer Upload Configuration
+
 const upload = multer({ 
   storage: storage,
   fileFilter: fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+  limits: { fileSize: 5 * 1024 * 1024 } 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 const Integrity = require('./models/Integrity');
 app.post('/update-integrity', async (req, res) => {
+  
   const { examId, userId, eventType } = req.body;
-  // mouseOuts=0
-  // console.log(eventType)
-  // if(eventType == "mouseOuts"){
-  //   mouseOuts == 1
-  // }
-  // await Integrity.updateOne(
-  //     { examId, userId, mouseOuts },
-  //     { $inc: { count: 1 }, $setOnInsert: { createdAt: new Date() } },
-  //     { upsert: true }
-  // );
-
-  // res.json({ success: true, message: "Integrity event updated." });
   const eventFieldMap = {
     tabChanges: "tabChanges",
     mouseOuts: "mouseOuts",
@@ -254,7 +212,6 @@ app.post('/update-integrity', async (req, res) => {
     focusChanges: "focusChanges"
 };
 
-// Check if the eventType is valid
 if (!eventFieldMap[eventType]) {
     return res.status(400).json({ success: false, message: "Invalid event type." });
 }
@@ -265,10 +222,10 @@ try {
     await Integrity.updateOne(
         { examId, userId },
         { 
-            $inc: { [updateField]: 1 },  // Increment the correct field
+            $inc: { [updateField]: 1 }, 
             $set: { lastEvent: eventType }
         },
-        { upsert: true }  // Create a new document if it doesn't exist
+        { upsert: true }  
     );
 
     res.json({ success: true, message: `Integrity event '${eventType}' updated.` });
@@ -278,51 +235,6 @@ try {
 }
 });
 
-// app.post('/update-integrity', async (req, res) => {
-//     try {
-//         const { examId, userId, eventType } = req.body;
-
-//         const updateFields = {};
-//         switch (eventType) {
-//             case 'tabChange':
-//                 updateFields.tabChanges = 1;
-//                 break;
-//             case 'mouseOut':
-//                 updateFields.mouseOuts = 1;
-//                 break;
-//             case 'fullscreenExit':
-//                 updateFields.fullscreenExits = 1;
-//                 break;
-//             case 'copyAttempt':
-//                 updateFields.copyAttempts = 1;
-//                 break;
-//             case 'pasteAttempt':
-//                 updateFields.pasteAttempts = 1;
-//                 break;
-//             case 'focusChange':
-//                 updateFields.focusChanges = 1;
-//                 break;
-//             default:
-//                 return res.status(400).json({ error: "Invalid event type" });
-//         }
-
-//         const integrityRecord = await Integrity.findOneAndUpdate(
-//             { examId, userId }, // Find existing record
-//             { 
-//                 $inc: updateFields, // Increment only the relevant field
-//                 lastEvent: eventType
-//             },
-//             { upsert: true, new: true } // Create if not exists, return updated
-//         );
-
-//         res.status(200).json({ message: "Integrity data updated", data: integrityRecord });
-//     } catch (error) {
-//         console.error("Error updating integrity data:", error);
-//         res.status(500).json({ error: "Internal Server Error" });
-//     }
-// });
-
-// API Route to Handle Image Uploads
 app.post('/save-image', upload.single('image'), (req, res) => {
   if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
@@ -339,16 +251,14 @@ app.use('/authenticate',authenticateing)
 app.use('/profile',profile)
 app.use('/user' , userauth)
 
-/*
-*/
+
 app.all('*', async (req,res,next)=>{
-  // const user = await User.find();
-  // console.log(user)
+
     res.render('pagenotfound')
     next();
 })
 
-//export app.js for server
+
 module.exports = app
 
 

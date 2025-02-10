@@ -22,7 +22,7 @@ exports.forgotcontrol = async(req,res)=>{
                  await sendEmails({
                      email  : req.body.email ,
                      subject : "reset password", 
-                     html : "The password reset link is : <a href = 'http://192.168.137.1:80/user/resetpassword/"+resetToken+"'>click here</a>"
+                     html : "The password reset link is : <a href = 'http://localhost:3000/user/resetpassword/"+resetToken+"'>click here</a>"
                  })
                  
                  res.redirect('/')
@@ -33,16 +33,8 @@ exports.forgotcontrol = async(req,res)=>{
                     user.passwordresetdate = undefined
                     await user.save({validateBeforeSave : false})
                     
-                }
-            
-        
+                }   
     }
- 
-
-
-    
-
- 
 }
 exports.getresetcontrol = async(req,res)=>{
     const hashedtoken = crypto.createHash('sha256').update(req.params.id).digest('hex')

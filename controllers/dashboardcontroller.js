@@ -110,7 +110,7 @@ exports.getStartExam = async(req,res)=>{
             return res.status(404).send("Exam not found");
         }
 
-        res.render("test", { user: req.user, exam });
+        res.render("test", { user: req.user, exam ,  });
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
